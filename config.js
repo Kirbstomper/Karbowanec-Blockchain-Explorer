@@ -1,5 +1,5 @@
-var api = 'http://localhost:32348/';
-var blockTargetInterval = 240;
+var api = 'http://localhost:32348';
+var blockTargetInterval = 30;
 var coinUnits = 1000000000000;
 var symbol = 'TRTL';
 var refreshDelay = 30000;
