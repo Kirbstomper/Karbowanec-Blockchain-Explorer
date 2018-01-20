@@ -29,7 +29,7 @@ curl_close($ch);
 $data_string2 = '{"jsonrpc":"2.0","id":"test","method":"f_block_json","params":{"hash":"'.$hash.'"}}';
 
 
-$ch2 = curl_init('http://52.21.253.162:32348/json_rpc');
+$ch2 = curl_init('http://localhost:32348/json_rpc');
 curl_setopt($ch2, CURLOPT_CUSTOMREQUEST, "POST");
 curl_setopt($ch2, CURLOPT_POSTFIELDS, $data_string2);
 curl_setopt($ch2, CURLOPT_RETURNTRANSFER, true);

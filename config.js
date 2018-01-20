@@ -1,7 +1,7 @@
 var api = 'http://localhost:32348/';
 var blockTargetInterval = 240;
 var coinUnits = 1000000000000;
-var symbol = 'KRB';
+var symbol = 'TRTL';
 var refreshDelay = 30000;
 // pools stats by MainCoins
 var networkStat = {
