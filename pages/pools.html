@@ -78,7 +78,7 @@
 								</ul>
 							</div>
 							<span class="input-group-addon">=</span>
-							<span class="input-group-addon" id="calcHashResultsHolder"><span id="calcHashAmount"></span> <span id="calcHashSymbol"></span> KRB / day</span>
+							<span class="input-group-addon" id="calcHashResultsHolder"><span id="calcHashAmount"></span> <span id="calcHashSymbol"></span> TRTL / day</span>
 						</div>
 					</div>
 				</div>
@@ -437,7 +437,7 @@ function renderBlocks(blocksResults){
 			success: function(data){
 				var blockRes = data.result.block;
 				Difficulties.push(parseInt(blockRes.difficulty));
-				//calcAvgHashRate();	
+				
 			
 			}
 
