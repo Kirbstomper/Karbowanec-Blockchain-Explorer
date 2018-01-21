@@ -47,7 +47,7 @@ $blockData = json_decode($block, TRUE);
 
 $supply = $blockData[result][block][alreadyGeneratedCoins];
 
-$supply  = number_format($supply / 1000000000000, 12, ".", "");
+$supply  = number_format($supply , 12, ".", "");
 
 print_r($supply);
 

@@ -1,6 +1,6 @@
 var api = 'http://localhost:11898';
 var blockTargetInterval = 30;
-var coinUnits = 1000000000000;
+var coinUnits = 100;
 var symbol = 'TRTL';
 var refreshDelay = 30000;
 // pools stats by MainCoins
