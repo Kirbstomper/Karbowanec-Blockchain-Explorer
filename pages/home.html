@@ -79,7 +79,6 @@
 			<table class="table table-hover" id="mem_pool_table">
 				<thead>
 				<tr>
-					<th width="30%"><i class="fa fa-clock-o"></i> Date &amp; time</th>
 					<th width="10%"><i class="fa fa-money"></i> Amount</th>
 					<th width="10%"><i class="fa fa-tag"></i> Fee</th>
 					<th width="10%"><i class="fa fa-archive"></i> Size</th>
@@ -140,7 +139,7 @@
 
 
 <script>
-console.log("Heyo")
+
 var block,
 	Difficulties = [],
 	Blocks = [],
@@ -181,7 +180,7 @@ currentPage = {
 				).then(function() {
 					setTimeout(function(){
 						refreshChart();
-						console.log("Update function")
+						
 					}, 100)
 				});
 			}
@@ -398,9 +397,9 @@ $('#goto-height').keyup(function(e){
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
             '<td class="blk-diff">' + block.difficulty + '</td>' +
             '<td>' + trans + '</td>';
-		//GEt difficulty
+		//Get difficulty
 		Difficulties.push(parseInt(block.difficulty));
-		//console.log(Difficulties.length);
+	
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
@@ -511,16 +510,15 @@ var xhrGetPool = $.ajax({
 				}
 				
 				var transactionList = data.result.transactions;
-				console.log(transactionList)
-				//console.log(transactionList);
+				
+			
 				for(var i = 0;i<transactionList.length;i++){
-					console.log("inside")
+					
 				var row = document.createElement('tr');
-					//console.log(data);
+					
 				var columns =
-						'<td>' + formatDate() + ' (<span class="mtx-ago"></span>)' + '</td>' +
-						'<td>' + getReadableCoins( transactionList[i].amount_out, 4, true) + '</td>' +
-						'<td>' + getReadableCoins( transactionList[i].fee, 4, true) + '</td>' +
+						'<td>' + getReadableCoins( transactionList[i].amount_out, 2, true) + '</td>' +
+						'<td>' + getReadableCoins( transactionList[i].fee, 2, true) + '</td>' +
 						'<td>' + transactionList[i].size +'</td>' +
 						'<td>' + formatPaymentLink(transactionList[i].hash) + '</td>';
 					row.innerHTML = columns;

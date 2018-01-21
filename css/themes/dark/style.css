@@ -3,18 +3,7 @@
         #coinName{
             text-transform: capitalize;
         }
-		#coinIcon{
-            text-transform: capitalize;
-			width: 1.3em;
-			height: 1.3em;
-			display: inline-block;
-			vertical-align: middle;
-			color: white;
-			border: 2px solid white;
-			border-radius: 50%;
-			text-align: center;
-			margin-top: -4px;
-        }
+		
         body {
             padding-top: 65px;
             padding-bottom: 80px;
@@ -86,7 +75,7 @@
 		}
 		
 		.btn-default {
-			background-color: #2B3E50;
+			background-color: rgb(7, 66, 12);
 		}
 		
 		
@@ -95,11 +84,11 @@
 		}
 		
 		.panel-default>.panel-heading .badge {
-			background-color: #2B3E50;
+			background-color: rgb(13, 58, 7);
 		}
 		
 		.form-control {
-			background-color: #485563;
+			background-color: #046419;
 			color: #FFF;
 		}
 		
