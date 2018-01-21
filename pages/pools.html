@@ -123,7 +123,6 @@
 <script src="/js/sorttable.js"></script>
 <script>
 window.NETWORK_STAT_MAP = new Map(networkStat[symbol.toLowerCase()]);
-window.NETWORK_STAT_MAP2 = new Map(networkStat2[symbol.toLowerCase()]);
 window.poolNames = [];
 window.poolHashrates = [];
 window.colors = [];
@@ -135,7 +134,7 @@ avgDiff = 0;
 
 var poolsRefreshed = 0;
 			NETWORK_STAT_MAP.forEach((url, host, map) => {
-				$.getJSON(url + '/stats', (data, textStatus, jqXHR) => {
+				$.getJSON(url , (data, textStatus, jqXHR) => {
 					var d = new Date(parseInt(data.pool.lastBlockFound));
 					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 					
@@ -165,41 +164,7 @@ var poolsRefreshed = 0;
 						setTimeout(function(){ displayChart(); }, 1000);
 					}
 			});
-			NETWORK_STAT_MAP2.forEach((url, host, map) => {
-				var index = host.indexOf("/");
-					var result;
-					if (index < 0) {
-						result = host;
-					} else {
-						result = host.substr(0, index);
-					}
-			
-				$.getJSON(url, (data, textStatus, jqXHR) => {
-					var d = new Date(parseInt(data.pool.lastBlockFound));
-					var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" + d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
-					
-					var agostring = $.timeago(d);
-					console.log("pool")
-					$('#pools_rows').append('<tr><td id=host'+result+'><a target=blank href=http://'+host+'>'+result+'</a></td><td class="height" id=height-'+result+'>'+data.network.height+'</td><td id=hashrate-'+result+'>'+data.pool.hashrate+'&nbsp;H/s</td><td id=miners-'+result+'>'+data.pool.miners+'</td><td id=totalFree-'+result+'>'+calculateTotalFree(data)+'%</td><td id=minPayout-'+result+'>'+getReadableCoins(data.config.minPaymentThreshold,2)+'</td><td><span id=lastFound-'+result+'>'+datestring+'</span> (<span class="timeago" id="ago-'+result+'">'+agostring+'</span>)</td><</tr>');
-					
-					totalHashrate += parseInt(data.pool.hashrate);
-					totalMiners += parseInt(data.pool.miners);
-					updateText('totalPoolsHashrate', getReadableHashRateString(totalHashrate) + '/sec');
-					updateText('total_miners', totalMiners);
-					poolNames.push(result);
-					poolHashrates.push(parseInt(data.pool.hashrate));
-					window.colors.push(getRandomColor());
-					displayChart();
-
-				});
-				
-				
-				poolsRefreshed++;
-					if (poolsRefreshed === NETWORK_STAT_MAP2.size){ 
-						setTimeout(function(){ displayChart(); }, 1000);
-					}
-			});
-			
+		
     currentPage = {
         destroy: function(){
         },
