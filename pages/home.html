@@ -162,6 +162,7 @@ currentPage = {
 				setTimeout(function(){
 					displayDiffChart();
 					refreshChart();
+					
 				}, 500)
 			});
         },
@@ -180,6 +181,7 @@ currentPage = {
 				).then(function() {
 					setTimeout(function(){
 						refreshChart();
+						console.log("Update function")
 					}, 100)
 				});
 			}
@@ -380,7 +382,7 @@ $('#goto-height').keyup(function(e){
 			});
     };
 
-    function getBlockRowElement(block, jsonString){
+    function getBlockRowElement(block, size,trans, jsonString){
 
         var row = document.createElement('tr');
         row.setAttribute('data-json', jsonString);
@@ -392,12 +394,13 @@ $('#goto-height').keyup(function(e){
         var columns =
             '<td>' + block.height + '</td>' +
             '<td class="date-time">' + formatDate(block.timestamp) + ' (<time class="timeago" datetime="'+dateTime+'"></time>)</td>' +
-			'<td>' + block.cumul_size + '</td>' +
+			'<td>' + size + '</td>' +
 			'<td>' + formatBlockLink(block.hash) + '</td>' +
             '<td class="blk-diff">' + block.difficulty + '</td>' +
-            '<td>' + block.tx_count + '</td>';
-
+            '<td>' + trans + '</td>';
+		//GEt difficulty
 		Difficulties.push(parseInt(block.difficulty));
+		//console.log(Difficulties.length);
 		Blocks.push(parseInt(block.height));
 		Txses.push(parseInt(block.tx_count));
 		Sizes.push(parseInt(block.cumul_size));
@@ -409,23 +412,41 @@ $('#goto-height').keyup(function(e){
     }
 
     function renderBlocks(blocksResults){
-
+		
+	
         var $blocksRows = $('#blocks_rows');
 
         for (var i = 0; i < blocksResults.length; i ++){
 
             var block = blocksResults[i];
-
+			var trans = block.tx_count;
+			var size = block.cumul_size;
             var blockJson = JSON.stringify(block);
-
+			
             var existingRow = document.getElementById('blockRow' + block.height);
-
-            if (existingRow && existingRow.getAttribute('data-json') !== blockJson){
-                $(existingRow).replaceWith(getBlockRowElement(block, blockJson));
+			
+			//AJax request to get the block based on hash
+			xhrGetBlocks = $.ajax({
+				url: api + '/json_rpc',
+				method: "POST",
+				data: JSON.stringify({
+					jsonrpc:"2.0",
+					id: "test",
+					method:"f_block_json",
+					params: {
+						hash: block.hash
+					}
+				}),
+				dataType: 'json',
+				cache: 'false',
+				success: function(data){
+					block = data.result.block;
+					if (existingRow && existingRow.getAttribute('data-json') !== blockJson){
+                $(existingRow).replaceWith(getBlockRowElement(block, size, trans, blockJson));
             }
             else if (!existingRow){
 
-                var blockElement = getBlockRowElement(block, blockJson);
+                var blockElement = getBlockRowElement(block, size, trans, blockJson);
 
                 var inserted = false;
                 var rows = $blocksRows.children().get();
@@ -441,9 +462,14 @@ $('#goto-height').keyup(function(e){
                     $blocksRows.append(blockElement);
 				}
             }
+			$("time.timeago").timeago();
+			calcAvgHashRate();		
+		}
+			});
+			
+           
         }
-		$("time.timeago").timeago();
-		calcAvgHashRate();
+		
     }
 
 	function calcAvgHashRate(){
@@ -475,7 +501,7 @@ var xhrGetPool = $.ajax({
   
                 }
             }),
-            dataType: 'text',
+            dataType: 'json',
             cache: 'false',
             success: function(data){
 			
@@ -483,8 +509,39 @@ var xhrGetPool = $.ajax({
 				while (txsRows.firstChild) {
 					txsRows.removeChild(txsRows.firstChild);
 				}
-			
-				var rawTxs = data.split('"transactions":"').pop();
+				
+				var transactionList = data.result.transactions;
+				//console.log(transactionList);
+				for(var i = 0;i<transactionList.length;i++){
+					var xhrGetTransactions = $.ajax({
+						url: api+ '/json_rpc',
+						method: "POST",
+						data: JSON.stringify({
+                			jsonrpc:"2.0",
+                			id: "test",
+               				method:"f_transaction_json",
+                			params: {
+								hash: transactionList[i].hash
+                			}
+					}),
+					dataType: 'json',
+					cache: 'false',
+					success: function(data){
+						var row = document.createElement('tr');
+						//console.log(data);
+						var columns =
+								'<td>' + formatDate(data.result.block.timestamp) + ' (<span class="mtx-ago"></span>)' + '</td>' +
+								'<td>' + getReadableCoins( transactionList[i].amount_out, 4, true) + '</td>' +
+								'<td>' + getReadableCoins( transactionList[i].fee, 4, true) + '</td>' +
+								'<td>' + data.result.block.tx_count +'</td>' +
+								'<td>' + formatPaymentLink(transactionList[i].hash) + '</td>';
+						row.innerHTML = columns;
+						$(txsRows).append(row);
+						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
+					}
+					});
+				}
+				/*var rawTxs = data.split('"transactions":"').pop();
 				rawTxs = rawTxs.split('"}}')[0];
 				var txsArray = [];
 				txsArray = rawTxs.split('\n\n');
@@ -507,7 +564,7 @@ var xhrGetPool = $.ajax({
 						$(txsRows).append(row);
 						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 					}
-				});
+				});*/
 				updateText('mempool_count', document.querySelectorAll('#mem_pool_rows tr').length);
 			}
     });
