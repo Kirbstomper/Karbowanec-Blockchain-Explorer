@@ -1,4 +1,4 @@
-# Karbowanec-Blockchain-Explorer
+# Tutlecoin-Blockchain-Explorer
 Block explorer for Turtlecoin cryptocurrency.
 
 #### Installation
