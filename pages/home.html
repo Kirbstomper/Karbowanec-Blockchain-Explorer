@@ -511,36 +511,24 @@ var xhrGetPool = $.ajax({
 				}
 				
 				var transactionList = data.result.transactions;
+				console.log(transactionList)
 				//console.log(transactionList);
 				for(var i = 0;i<transactionList.length;i++){
-					var xhrGetTransactions = $.ajax({
-						url: api+ '/json_rpc',
-						method: "POST",
-						data: JSON.stringify({
-                			jsonrpc:"2.0",
-                			id: "test",
-               				method:"f_transaction_json",
-                			params: {
-								hash: transactionList[i].hash
-                			}
-					}),
-					dataType: 'json',
-					cache: 'false',
-					success: function(data){
-						var row = document.createElement('tr');
-						//console.log(data);
-						var columns =
-								'<td>' + formatDate(data.result.block.timestamp) + ' (<span class="mtx-ago"></span>)' + '</td>' +
-								'<td>' + getReadableCoins( transactionList[i].amount_out, 4, true) + '</td>' +
-								'<td>' + getReadableCoins( transactionList[i].fee, 4, true) + '</td>' +
-								'<td>' + data.result.block.tx_count +'</td>' +
-								'<td>' + formatPaymentLink(transactionList[i].hash) + '</td>';
-						row.innerHTML = columns;
-						$(txsRows).append(row);
-						$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
-					}
-					});
+					console.log("inside")
+				var row = document.createElement('tr');
+					//console.log(data);
+				var columns =
+						'<td>' + formatDate() + ' (<span class="mtx-ago"></span>)' + '</td>' +
+						'<td>' + getReadableCoins( transactionList[i].amount_out, 4, true) + '</td>' +
+						'<td>' + getReadableCoins( transactionList[i].fee, 4, true) + '</td>' +
+						'<td>' + transactionList[i].size +'</td>' +
+						'<td>' + formatPaymentLink(transactionList[i].hash) + '</td>';
+					row.innerHTML = columns;
+					$(txsRows).append(row);
+					//$(row).find('.mtx-ago').timeago('update', new Date(timestamp * 1000).toISOString());
 				}
+					
+				
 				/*var rawTxs = data.split('"transactions":"').pop();
 				rawTxs = rawTxs.split('"}}')[0];
 				var txsArray = [];
@@ -567,8 +555,8 @@ var xhrGetPool = $.ajax({
 				});*/
 				updateText('mempool_count', document.querySelectorAll('#mem_pool_rows tr').length);
 			}
-    });
-};
+		})
+}
 
 // Difficulty chart
 function displayDiffChart() {
