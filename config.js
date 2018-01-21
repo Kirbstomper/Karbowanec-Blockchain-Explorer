@@ -8,12 +8,13 @@ var networkStat = {
 	"trtl":[
 		["Z-pool.com","http://z-pool.com:8117"],
 		["turtle.atpool.party","http://turtle-eu.atpool.party:8117"]
-		
-] 
+
+	] 
 };
 
 var networkStat2 = {
-    "krb": [
-		["karbowanec.hashvault.pro", "https://karbowanec.hashvault.pro/api"]
+    "trtl": [
+		["pool.turtleco.in","https://pool.turtleco.in/api/live_stats"],
+		["turtlepool.space","http://eu.turtlepool.space:8117/live_stats"]
 		]
 };
