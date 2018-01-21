@@ -1,4 +1,4 @@
-<!-- // pools stats by MainCoins @ http://krb.mypool.name -->
+
 
 <style>
     #pools_rows > tr > td{
@@ -412,12 +412,40 @@ function getBlocks() {
 }
 
 function renderBlocks(blocksResults){
-        for (var i = 0; i < blocksResults.length; i ++){
-            var block = blocksResults[i];
-			Difficulties.push(parseInt(block.difficulty));
-        }
-		
-}
+
+	for (var i = 0; i < blocksResults.length; i ++){
+
+		var block = blocksResults[i];
+
+		var blockJson = JSON.stringify(block);
+
+
+		//AJax request to get the block based on hash
+		xhrGetBlocks = $.ajax({
+			url: api + '/json_rpc',
+			method: "POST",
+			data: JSON.stringify({
+				jsonrpc:"2.0",
+				id: "test",
+				method:"f_block_json",
+				params: {
+					hash: block.hash
+				}
+			}),
+			dataType: 'json',
+			cache: 'false',
+			success: function(data){
+				var blockRes = data.result.block;
+				Difficulties.push(parseInt(blockRes.difficulty));
+				//calcAvgHashRate();	
+			
+			}
+
+
+		});
+		}
+		calcAvgHashRate();
+	}
 
 function calcAvgHashRate(){
 		var sum = Difficulties.reduce(add, 0);
